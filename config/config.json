@@ -1,9 +1,0 @@
-{
-  "development": {
-    "username": "root",
-    "password": "Caio2204",
-    "database": "betting-dashboard",
-    "host": "localhost",
-    "dialect": "mysql"
-  }
-}
