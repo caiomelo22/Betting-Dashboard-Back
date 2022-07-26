@@ -1,0 +1,87 @@
+[
+	{
+		"id" : 118,
+		"name" : "Bahia"
+	},
+	{
+		"id" : 123,
+		"name" : "Sport Recife"
+	},
+	
+	{
+		"id" : 132,
+		"name" : "Chapecoense-SC"
+	},
+	{
+		"id" : 133,
+		"name" : "Vasco"
+	},
+	{
+		"id" : 135,
+		"name" : "Cruzeiro"
+	},
+	{
+		"id" : 138,
+		"name" : "Guarani"
+	},
+	{
+		"id" : 139,
+		"name" : "Ponte Preta"
+	},
+	{
+		"id" : 140,
+		"name" : "Criciuma"
+	},
+	{
+		"id" : 142,
+		"name" : "Vila Nova"
+	},
+	{
+		"id" : 146,
+		"name" : "CRB"
+	},
+	{
+		"id" : 148,
+		"name" : "Londrina"
+	},
+	{
+		"id" : 150,
+		"name" : "CSA"
+	},
+	{
+		"id" : 155,
+		"name" : "Sampaio Correa"
+	},
+	{
+		"id" : 752,
+		"name" : "Luverdense"
+	},
+	{
+		"id" : 755,
+		"name" : "Nautico"
+	},
+	{
+		"id" : 1211,
+		"name" : "Brusque"
+	},
+	{
+		"id" : 1223,
+		"name" : "Operario"
+	},
+	{
+		"id" : 2227,
+		"name" : "Tombense"
+	},
+	{
+		"id" : 7779,
+		"name" : "Ituano"
+	},
+	{
+		"id" : 7834,
+		"name" : "Novorizontino"
+	},
+	{
+		"id" : 130,
+		"name" : "Gremio"
+	}
+]

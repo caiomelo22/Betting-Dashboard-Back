@@ -1,0 +1,146 @@
+[
+	{
+		"id" : 118,
+		"name" : "Bahia"
+	},
+	{
+		"id" : 119,
+		"name" : "Internacional"
+	},
+	{
+		"id" : 120,
+		"name" : "Botafogo RJ"
+	},
+	{
+		"id" : 121,
+		"name" : "Palmeiras"
+	},
+	{
+		"id" : 122,
+		"name" : "Parana"
+	},
+	{
+		"id" : 123,
+		"name" : "Sport Recife"
+	},
+	{
+		"id" : 124,
+		"name" : "Fluminense"
+	},
+	{
+		"id" : 125,
+		"name" : "America MG"
+	},
+	{
+		"id" : 126,
+		"name" : "Sao Paulo"
+	},
+	{
+		"id" : 127,
+		"name" : "Flamengo RJ"
+	},
+	{
+		"id" : 128,
+		"name" : "Santos"
+	},
+	{
+		"id" : 129,
+		"name" : "Ceara"
+	},
+	{
+		"id" : 130,
+		"name" : "Gremio"
+	},
+	{
+		"id" : 131,
+		"name" : "Corinthians"
+	},
+	{
+		"id" : 132,
+		"name" : "Chapecoense-SC"
+	},
+	{
+		"id" : 133,
+		"name" : "Vasco"
+	},
+	{
+		"id" : 134,
+		"name" : "Athletico-PR"
+	},
+	{
+		"id" : 135,
+		"name" : "Cruzeiro"
+	},
+	{
+		"id" : 136,
+		"name" : "Vitoria"
+	},
+	{
+		"id" : 137,
+		"name" : "Figueirense"
+	},
+	{
+		"id" : 139,
+		"name" : "Ponte Preta"
+	},
+	{
+		"id" : 140,
+		"name" : "Criciuma"
+	},
+	{
+		"id" : 144,
+		"name" : "Atletico GO"
+	},
+	{
+		"id" : 145,
+		"name" : "Avai"
+	},
+	{
+		"id" : 147,
+		"name" : "Coritiba"
+	},
+	{
+		"id" : 150,
+		"name" : "CSA"
+	},
+	{
+		"id" : 151,
+		"name" : "Goias"
+	},
+	{
+		"id" : 152,
+		"name" : "Juventude"
+	},
+	{
+		"id" : 154,
+		"name" : "Fortaleza"
+	},
+	{
+		"id" : 753,
+		"name" : "Santa Cruz"
+	},
+	{
+		"id" : 755,
+		"name" : "Nautico"
+	},
+	{
+		"id" : 794,
+		"name" : "Bragantino"
+	},
+	{
+		"id" : 795,
+		"name" : "Joinville"
+	},
+	{
+		"id" : 1062,
+		"name" : "Atletico-MG"
+	},
+	{
+		"id" : 1193,
+		"name" : "Cuiaba"
+	},
+	{
+		"id" : 1214,
+		"name" : "Portuguesa"
+	}
+]
