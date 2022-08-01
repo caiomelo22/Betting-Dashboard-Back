@@ -3,6 +3,7 @@ const { Router } = require("express");
 const leagueController = require('../controllers/LeagueController');
 const betController = require('../controllers/BetController');
 const matchController = require('../controllers/MatchController');
+const configController = require('../controllers/ConfigController');
 
 const router = Router();
 
@@ -18,5 +19,7 @@ router.get("/bet/dashboard", betController.dashboard);
 
 router.get("/match/list", matchController.list);
 router.put("/match/update", matchController.update);
+
+router.put("/config/update-deposited-value", configController.update_deposited_value);
 
 module.exports = router;

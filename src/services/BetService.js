@@ -5,6 +5,7 @@ const BetMoneyline = require('../models/BetMoneyline').BetMoneyline;
 const BetTotal = require('../models/BetTotal').BetTotal;
 const moment = require('moment');
 const { League } = require('../models/League');
+const {get_deposited_value} = require('../services/ConfigService');
 
 const list = async (req, res) => {
   try {
@@ -144,7 +145,8 @@ const dashboard = async (req, res) => {
       totalBet: 0,
       totalProfit: 0,
       totalGreens: 0,
-      totalReds: 0
+      totalReds: 0,
+      totalDeposited: (await get_deposited_value()).data
     }
 
     for (let i = 0; i < bets.length; i++) {

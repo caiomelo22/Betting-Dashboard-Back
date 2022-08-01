@@ -1,0 +1,7 @@
+{
+    "username": "root",
+    "password": "password",
+    "database": "betting-dashboard",
+    "host": "localhost",
+    "dialect": "mysql"
+}
