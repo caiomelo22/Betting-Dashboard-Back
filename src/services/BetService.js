@@ -5,7 +5,7 @@ const BetMoneyline = require('../models/BetMoneyline').BetMoneyline;
 const BetTotal = require('../models/BetTotal').BetTotal;
 const moment = require('moment');
 const { League } = require('../models/League');
-const {get_deposited_value} = require('../services/ConfigService');
+const { get_deposited_value } = require('../services/ConfigService');
 
 const list = async (req, res) => {
   try {
@@ -120,7 +120,7 @@ const remove = async (req, res) => {
 };
 
 const update_bar_chart_colors = (barChartInfo) => {
-  if(barChartInfo.datasets[0].data[barChartInfo.datasets[0].data.length - 1] > 0) {
+  if (barChartInfo.datasets[0].data[barChartInfo.datasets[0].data.length - 1] > 0) {
     barChartInfo.datasets[0].backgroundColor.push('#41b883')
     barChartInfo.datasets[0].borderColor.push('#41b883')
   } else if (barChartInfo.datasets[0].data[barChartInfo.datasets[0].data.length - 1] < 0) {
@@ -137,6 +137,27 @@ const dashboard = async (req, res) => {
         ['updatedAt', 'DESC'],
       ],
     });
+
+    const leagues = await League.findAll();
+
+    let labels = []
+    const colors = ['green', 'blue', '#EAE509', 'orange']
+
+    let leagueChartInfo = {
+      labels: [],
+      datasets: []
+    }
+
+    for (let i = 0; i < leagues.length; i++) {
+      leagueChartInfo.datasets.push({
+        label: leagues[i].name,
+        leagueId: leagues[i].id,
+        fill: false,
+        backgroundColor: colors[i],
+        borderColor: colors[i],
+        data: []
+      })
+    }
 
     // Inicializando a estrutura base do gráfico utilizada pelo ChartJS
     let chartInfo = {
@@ -175,34 +196,51 @@ const dashboard = async (req, res) => {
 
     for (let i = 0; i < bets.length; i++) {
       let betDate = moment(bets[i].match.matchDate).format('DD-MM-YYYY')
-      if (chartInfo.labels[chartInfo.labels.length - 1] != betDate) {
+      if (labels[labels.length - 1] != betDate) {
         update_bar_chart_colors(barChartInfo)
 
-        chartInfo.labels.push(betDate)
-        barChartInfo.labels.push(betDate)
+        labels.push(betDate)
         chartInfo.datasets[0].data.push(generalInfo.totalProfit)
         barChartInfo.datasets[0].data.push(0)
+
+        for (let i = 0; i < leagues.length; i++) {
+          leagueChartInfo.datasets[i].data.push(leagueChartInfo.datasets[i].data[leagueChartInfo.datasets[i].data.length - 1] || 0)
+        }
       }
 
       if (bets[i].match.scoreHomeTeam !== null && bets[i].match.scoreAwayTeam !== null) {
         generalInfo.totalBet += bets[i].value
+
+        let betOutcomeValue
         if (bets[i].won) {
           generalInfo.totalGreens += 1
-          generalInfo.totalProfit += bets[i].value * bets[i].odds - bets[i].value
-          barChartInfo.datasets[0].data[chartInfo.datasets[0].data.length - 1] += bets[i].value * bets[i].odds - bets[i].value
-          chartInfo.datasets[0].data[chartInfo.datasets[0].data.length - 1] += bets[i].value * bets[i].odds - bets[i].value
+          betOutcomeValue = bets[i].value * bets[i].odds - bets[i].value
         } else {
           generalInfo.totalReds += 1
-          generalInfo.totalProfit -= bets[i].value
-          barChartInfo.datasets[0].data[chartInfo.datasets[0].data.length - 1] -= bets[i].value
-          chartInfo.datasets[0].data[chartInfo.datasets[0].data.length - 1] -= bets[i].value
+          betOutcomeValue = -bets[i].value
         }
+
+        generalInfo.totalProfit += betOutcomeValue
+        barChartInfo.datasets[0].data[chartInfo.datasets[0].data.length - 1] += betOutcomeValue
+        chartInfo.datasets[0].data[chartInfo.datasets[0].data.length - 1] += betOutcomeValue
+
+        const index = leagueChartInfo.datasets.map(x => x.leagueId).indexOf(bets[i].match.leagueId)
+        leagueChartInfo.datasets[index].data[leagueChartInfo.datasets[index].data.length - 1] += betOutcomeValue
       }
     }
 
     update_bar_chart_colors(barChartInfo)
 
-    return { statusCode: 200, data: {chartInfo, generalInfo, barChartInfo} };
+    leagueChartInfo.labels = labels
+    barChartInfo.labels = labels
+    chartInfo.labels = labels
+
+    leagueChartInfo.datasets = leagueChartInfo.datasets.map(x => {
+      x.hidden = x.data[x.data.length - 1] == 0
+      return x
+    })
+
+    return { statusCode: 200, data: { chartInfo, generalInfo, barChartInfo, leagueChartInfo } };
   } catch (error) {
     console.log(error)
     return { statusCode: 500, data: 'An error has occured', error: error }
