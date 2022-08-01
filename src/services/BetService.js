@@ -119,6 +119,16 @@ const remove = async (req, res) => {
   }
 };
 
+const update_bar_chart_colors = (barChartInfo) => {
+  if(barChartInfo.datasets[0].data[barChartInfo.datasets[0].data.length - 1] > 0) {
+    barChartInfo.datasets[0].backgroundColor.push('#41b883')
+    barChartInfo.datasets[0].borderColor.push('#41b883')
+  } else if (barChartInfo.datasets[0].data[barChartInfo.datasets[0].data.length - 1] < 0) {
+    barChartInfo.datasets[0].backgroundColor.push('red')
+    barChartInfo.datasets[0].borderColor.push('red')
+  }
+}
+
 const dashboard = async (req, res) => {
   try {
     const bets = await Bet.findAll({
@@ -141,6 +151,20 @@ const dashboard = async (req, res) => {
         },
       ]
     }
+
+    let barChartInfo = {
+      labels: [],
+      datasets: [
+        {
+          label: 'Profit by Day',
+          fill: false,
+          backgroundColor: [],
+          borderColor: [],
+          data: []
+        },
+      ]
+    }
+
     let generalInfo = {
       totalBet: 0,
       totalProfit: 0,
@@ -152,8 +176,12 @@ const dashboard = async (req, res) => {
     for (let i = 0; i < bets.length; i++) {
       let betDate = moment(bets[i].match.matchDate).format('DD-MM-YYYY')
       if (chartInfo.labels[chartInfo.labels.length - 1] != betDate) {
+        update_bar_chart_colors(barChartInfo)
+
         chartInfo.labels.push(betDate)
+        barChartInfo.labels.push(betDate)
         chartInfo.datasets[0].data.push(generalInfo.totalProfit)
+        barChartInfo.datasets[0].data.push(0)
       }
 
       if (bets[i].match.scoreHomeTeam !== null && bets[i].match.scoreAwayTeam !== null) {
@@ -161,16 +189,20 @@ const dashboard = async (req, res) => {
         if (bets[i].won) {
           generalInfo.totalGreens += 1
           generalInfo.totalProfit += bets[i].value * bets[i].odds - bets[i].value
+          barChartInfo.datasets[0].data[chartInfo.datasets[0].data.length - 1] += bets[i].value * bets[i].odds - bets[i].value
           chartInfo.datasets[0].data[chartInfo.datasets[0].data.length - 1] += bets[i].value * bets[i].odds - bets[i].value
         } else {
           generalInfo.totalReds += 1
           generalInfo.totalProfit -= bets[i].value
+          barChartInfo.datasets[0].data[chartInfo.datasets[0].data.length - 1] -= bets[i].value
           chartInfo.datasets[0].data[chartInfo.datasets[0].data.length - 1] -= bets[i].value
         }
       }
     }
 
-    return { statusCode: 200, data: {chartInfo, generalInfo} };
+    update_bar_chart_colors(barChartInfo)
+
+    return { statusCode: 200, data: {chartInfo, generalInfo, barChartInfo} };
   } catch (error) {
     console.log(error)
     return { statusCode: 500, data: 'An error has occured', error: error }
