@@ -1,5 +1,7 @@
 # Backend
 
+To access the backend and overview of the project, go to [Betting Dashboard: Front](https://github.com/caiomelo22/Betting-Dashboard-Front).
+
 ## Build Setup
 
 ```bash
