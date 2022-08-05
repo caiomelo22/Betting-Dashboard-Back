@@ -14,7 +14,7 @@ const list = async (req, res) => {
     const pageSize = 15
 
     const { count, rows } = await Bet.findAndCountAll({
-      include: [{ model: Match, as: 'match', include: [{ model: Team, as: 'homeTeam' }, { model: Team, as: 'awayTeam' }, { model: League, as: 'league' }] }, { model: BetTotal, as: 'total' }, { model: BetMoneyline, as: 'moneyline' }], offset: page - 1, limit: pageSize, order: [
+      include: [{ model: Match, as: 'match', include: [{ model: Team, as: 'homeTeam' }, { model: Team, as: 'awayTeam' }, { model: League, as: 'league' }] }, { model: BetTotal, as: 'total' }, { model: BetMoneyline, as: 'moneyline' }], offset: (page - 1)*pageSize, limit: pageSize, order: [
         [{ model: Match, as: 'match' }, 'matchDate', 'DESC'],
         ['updatedAt', 'DESC'],
       ],
