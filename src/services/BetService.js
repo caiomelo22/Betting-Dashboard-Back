@@ -164,10 +164,17 @@ const dashboard = async (req, res) => {
       labels: [],
       datasets: [
         {
-          label: 'Bets Progression',
+          label: 'Progression',
           fill: false,
           backgroundColor: '#41b883',
           borderColor: '#41b883',
+          data: []
+        },
+        {
+          label: 'Moving Average',
+          fill: false,
+          backgroundColor: '#9C9EFE',
+          borderColor: '#9C9EFE',
           data: []
         },
       ]
@@ -203,6 +210,10 @@ const dashboard = async (req, res) => {
         chartInfo.datasets[0].data.push(generalInfo.totalProfit)
         barChartInfo.datasets[0].data.push(0)
 
+        const last5Profit = chartInfo.datasets[0].data.slice(-5).reduce((acc, val) => acc + val);
+        const last5Lenght = chartInfo.datasets[0].data.slice(-5).length
+        chartInfo.datasets[1].data.push(last5Profit/last5Lenght)
+
         for (let i = 0; i < leagues.length; i++) {
           leagueChartInfo.datasets[i].data.push(leagueChartInfo.datasets[i].data[leagueChartInfo.datasets[i].data.length - 1] || 0)
         }
@@ -221,7 +232,7 @@ const dashboard = async (req, res) => {
         }
 
         generalInfo.totalProfit += betOutcomeValue
-        barChartInfo.datasets[0].data[chartInfo.datasets[0].data.length - 1] += betOutcomeValue
+        barChartInfo.datasets[0].data[barChartInfo.datasets[0].data.length - 1] += betOutcomeValue
         chartInfo.datasets[0].data[chartInfo.datasets[0].data.length - 1] += betOutcomeValue
 
         const index = leagueChartInfo.datasets.map(x => x.leagueId).indexOf(bets[i].match.leagueId)
