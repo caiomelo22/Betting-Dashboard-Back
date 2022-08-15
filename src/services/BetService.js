@@ -14,7 +14,7 @@ const list = async (req, res) => {
     const pageSize = 15
 
     const { count, rows } = await Bet.findAndCountAll({
-      include: [{ model: Match, as: 'match', include: [{ model: Team, as: 'homeTeam' }, { model: Team, as: 'awayTeam' }, { model: League, as: 'league' }] }, { model: BetTotal, as: 'total' }, { model: BetMoneyline, as: 'moneyline' }], offset: (page - 1)*pageSize, limit: pageSize, order: [
+      include: [{ model: Match, as: 'match', include: [{ model: Team, as: 'homeTeam' }, { model: Team, as: 'awayTeam' }, { model: League, as: 'league' }] }, { model: BetTotal, as: 'total' }, { model: BetMoneyline, as: 'moneyline' }], offset: (page - 1) * pageSize, limit: pageSize, order: [
         [{ model: Match, as: 'match' }, 'matchDate', 'DESC'],
         ['updatedAt', 'DESC'],
       ],
@@ -124,15 +124,22 @@ const update_bar_chart_colors = (barChartInfo) => {
     barChartInfo.datasets[0].backgroundColor.push('#41b883')
     barChartInfo.datasets[0].borderColor.push('#41b883')
   } else if (barChartInfo.datasets[0].data[barChartInfo.datasets[0].data.length - 1] < 0) {
-    barChartInfo.datasets[0].backgroundColor.push('red')
-    barChartInfo.datasets[0].borderColor.push('red')
+    barChartInfo.datasets[0].backgroundColor.push('#990000')
+    barChartInfo.datasets[0].borderColor.push('#990000')
   }
 }
+
+const project_colors = [
+  '#9C9EFE', '#2B4865', '#41b883', '#774360'
+]
 
 const dashboard = async (req, res) => {
   try {
     const bets = await Bet.findAll({
-      include: { model: Match, as: 'match', include: { model: League, as: 'league' } }, order: [
+      include: [{
+        model: Match, as: 'match', include: [{ model: Team, as: 'homeTeam' },
+        { model: Team, as: 'awayTeam' }, { model: League, as: 'league' }]
+      }, { model: BetTotal, as: 'total' }, { model: BetMoneyline, as: 'moneyline' }], order: [
         [{ model: Match, as: 'match' }, 'matchDate', 'ASC'],
         ['updatedAt', 'DESC'],
       ],
@@ -141,7 +148,6 @@ const dashboard = async (req, res) => {
     const leagues = await League.findAll();
 
     let labels = []
-    const colors = ['green', 'blue', '#EAE509', 'orange']
 
     let leagueChartInfo = {
       labels: [],
@@ -153,8 +159,8 @@ const dashboard = async (req, res) => {
         label: leagues[i].name,
         leagueId: leagues[i].id,
         fill: false,
-        backgroundColor: colors[i],
-        borderColor: colors[i],
+        backgroundColor: project_colors[i],
+        borderColor: project_colors[i],
         data: []
       })
     }
@@ -193,6 +199,13 @@ const dashboard = async (req, res) => {
       ]
     }
 
+    let profitByTeam = {}
+    let proiftByOutcome = {
+      'Home': 0,
+      'Draw': 0,
+      'Away': 0,
+    }
+
     let generalInfo = {
       totalBet: 0,
       totalProfit: 0,
@@ -212,7 +225,7 @@ const dashboard = async (req, res) => {
 
         const last5Profit = chartInfo.datasets[0].data.slice(-5).reduce((acc, val) => acc + val);
         const last5Lenght = chartInfo.datasets[0].data.slice(-5).length
-        chartInfo.datasets[1].data.push(last5Profit/last5Lenght)
+        chartInfo.datasets[1].data.push(last5Profit / last5Lenght)
 
         for (let i = 0; i < leagues.length; i++) {
           leagueChartInfo.datasets[i].data.push(leagueChartInfo.datasets[i].data[leagueChartInfo.datasets[i].data.length - 1] || 0)
@@ -231,6 +244,22 @@ const dashboard = async (req, res) => {
           betOutcomeValue = -bets[i].value
         }
 
+        if (bets[i].type == 'Moneyline') {
+          let team
+          switch (bets[i].moneyline.prediction) {
+            case 'Home':
+              team = bets[i].match.homeTeam.name;
+              break;
+            case 'Away':
+              team = bets[i].match.awayTeam.name;
+              break;
+          }
+
+          if (!(team in profitByTeam)) profitByTeam[team] = 0
+          if (bets[i].moneyline.prediction != 'Draw') profitByTeam[team] += betOutcomeValue
+          proiftByOutcome[bets[i].moneyline.prediction] += betOutcomeValue
+        }
+
         generalInfo.totalProfit += betOutcomeValue
         barChartInfo.datasets[0].data[barChartInfo.datasets[0].data.length - 1] += betOutcomeValue
         chartInfo.datasets[0].data[chartInfo.datasets[0].data.length - 1] += betOutcomeValue
@@ -238,6 +267,49 @@ const dashboard = async (req, res) => {
         const index = leagueChartInfo.datasets.map(x => x.leagueId).indexOf(bets[i].match.leagueId)
         leagueChartInfo.datasets[index].data[leagueChartInfo.datasets[index].data.length - 1] += betOutcomeValue
       }
+    }
+
+    let teamChartInfo = {
+      labels: [],
+      datasets: [
+        {
+          label: 'Profit by Team',
+          fill: false,
+          backgroundColor: [],
+          borderColor: [],
+          data: []
+        },
+      ]
+    }
+
+    for (let team in Object.entries(profitByTeam)
+      .sort(([, a], [, b]) => a - b)
+      .reduce((r, [k, v]) => ({ ...r, [k]: v }), {})) {
+        if(profitByTeam[team])
+        {
+          teamChartInfo.labels.push(team)
+          teamChartInfo.datasets[0].data.push(profitByTeam[team])          
+          update_bar_chart_colors(teamChartInfo)
+        }
+    }
+
+    let outcomeChartInfo = {
+      labels: [],
+      datasets: [
+        {
+          label: 'Profit by Outcome',
+          backgroundColor: project_colors,
+          borderColor: project_colors,
+          data: []
+        },
+      ]
+    }
+
+    for (let outcome in Object.entries(proiftByOutcome)
+      .sort(([, a], [, b]) => a - b)
+      .reduce((r, [k, v]) => ({ ...r, [k]: v }), {})) {
+        outcomeChartInfo.labels.push(outcome)
+        outcomeChartInfo.datasets[0].data.push(proiftByOutcome[outcome])
     }
 
     update_bar_chart_colors(barChartInfo)
@@ -251,7 +323,7 @@ const dashboard = async (req, res) => {
       return x
     })
 
-    return { statusCode: 200, data: { chartInfo, generalInfo, barChartInfo, leagueChartInfo } };
+    return { statusCode: 200, data: { chartInfo, generalInfo, barChartInfo, leagueChartInfo, teamChartInfo, outcomeChartInfo } };
   } catch (error) {
     console.log(error)
     return { statusCode: 500, data: 'An error has occured', error: error }
