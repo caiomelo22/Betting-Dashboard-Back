@@ -220,12 +220,9 @@ const dashboard = async (req, res) => {
         update_bar_chart_colors(barChartInfo)
 
         labels.push(betDate)
+
         chartInfo.datasets[0].data.push(generalInfo.totalProfit)
         barChartInfo.datasets[0].data.push(0)
-
-        const last5Profit = chartInfo.datasets[0].data.slice(-5).reduce((acc, val) => acc + val);
-        const last5Lenght = chartInfo.datasets[0].data.slice(-5).length
-        chartInfo.datasets[1].data.push(last5Profit / last5Lenght)
 
         for (let i = 0; i < leagues.length; i++) {
           leagueChartInfo.datasets[i].data.push(leagueChartInfo.datasets[i].data[leagueChartInfo.datasets[i].data.length - 1] || 0)
@@ -263,6 +260,13 @@ const dashboard = async (req, res) => {
         generalInfo.totalProfit += betOutcomeValue
         barChartInfo.datasets[0].data[barChartInfo.datasets[0].data.length - 1] += betOutcomeValue
         chartInfo.datasets[0].data[chartInfo.datasets[0].data.length - 1] += betOutcomeValue
+
+        if(i + 1 == bets.length || moment(bets[i + 1].match.matchDate).format('DD-MM-YYYY') != betDate) {
+          const last5Profit = chartInfo.datasets[0].data.slice(-5).reduce((acc, val) => acc + val);
+          const last5Length = chartInfo.datasets[0].data.slice(-5).length
+          movingAvg = last5Profit / last5Length
+          chartInfo.datasets[1].data.push(movingAvg)
+        }
 
         const index = leagueChartInfo.datasets.map(x => x.leagueId).indexOf(bets[i].match.leagueId)
         leagueChartInfo.datasets[index].data[leagueChartInfo.datasets[index].data.length - 1] += betOutcomeValue
