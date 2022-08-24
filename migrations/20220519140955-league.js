@@ -23,7 +23,7 @@ module.exports = {
       updatedAt: Sequelize.DATE,
     });
     await queryInterface.bulkInsert('leagues', [
-      {name: 'NBA', sportId: 2, createdAt: new Date(), updatedAt: new Date()},
+      {id: 1, name: 'NBA', sportId: 2, createdAt: new Date(), updatedAt: new Date()},
     ]);
   },
 

@@ -1,87 +1,402 @@
 [
-	{
-		"id" : 118,
-		"name" : "Bahia"
-	},
-	{
-		"id" : 123,
-		"name" : "Sport Recife"
-	},
-	
-	{
-		"id" : 132,
-		"name" : "Chapecoense-SC"
-	},
-	{
-		"id" : 133,
-		"name" : "Vasco"
-	},
-	{
-		"id" : 135,
-		"name" : "Cruzeiro"
-	},
-	{
-		"id" : 138,
-		"name" : "Guarani"
-	},
-	{
-		"id" : 139,
-		"name" : "Ponte Preta"
-	},
-	{
-		"id" : 140,
-		"name" : "Criciuma"
-	},
-	{
-		"id" : 142,
-		"name" : "Vila Nova"
-	},
-	{
-		"id" : 146,
-		"name" : "CRB"
-	},
-	{
-		"id" : 148,
-		"name" : "Londrina"
-	},
-	{
-		"id" : 150,
-		"name" : "CSA"
-	},
-	{
-		"id" : 155,
-		"name" : "Sampaio Correa"
-	},
-	{
-		"id" : 752,
-		"name" : "Luverdense"
-	},
-	{
-		"id" : 755,
-		"name" : "Nautico"
-	},
-	{
-		"id" : 1211,
-		"name" : "Brusque"
-	},
-	{
-		"id" : 1223,
-		"name" : "Operario"
-	},
-	{
-		"id" : 2227,
-		"name" : "Tombense"
-	},
-	{
-		"id" : 7779,
-		"name" : "Ituano"
-	},
-	{
-		"id" : 7834,
-		"name" : "Novorizontino"
-	},
-	{
-		"id" : 130,
-		"name" : "Gremio"
-	}
+    {
+        "team": {
+            "id": 118,
+            "name": "Bahia",
+            "code": "BAH",
+            "country": "Brazil",
+            "founded": 1931,
+            "national": false,
+            "logo": "https://media.api-sports.io/football/teams/118.png"
+        },
+        "venue": {
+            "id": 216,
+            "name": "Arena Fonte Nova",
+            "address": "Rua Lions Club, Nazaré",
+            "city": "Salvador, Bahia",
+            "capacity": 56500,
+            "surface": "grass",
+            "image": "https://media.api-sports.io/football/venues/216.png"
+        }
+    },
+    {
+        "team": {
+            "id": 123,
+            "name": "Sport Recife",
+            "code": "SPO",
+            "country": "Brazil",
+            "founded": 1905,
+            "national": false,
+            "logo": "https://media.api-sports.io/football/teams/123.png"
+        },
+        "venue": {
+            "id": 276,
+            "name": "Estádio Adelmar da Costa Carvalho",
+            "address": "Praça da Bandeira",
+            "city": "Recife, Pernambuco",
+            "capacity": 32983,
+            "surface": "grass",
+            "image": "https://media.api-sports.io/football/venues/276.png"
+        }
+    },
+    {
+        "team": {
+            "id": 130,
+            "name": "Gremio",
+            "code": "GRE",
+            "country": "Brazil",
+            "founded": 1903,
+            "national": false,
+            "logo": "https://media.api-sports.io/football/teams/130.png"
+        },
+        "venue": {
+            "id": 241,
+            "name": "Arena do Grêmio",
+            "address": "Bairro Humaitá",
+            "city": "Porto Alegre, Rio Grande do Sul",
+            "capacity": 60540,
+            "surface": "grass",
+            "image": "https://media.api-sports.io/football/venues/241.png"
+        }
+    },
+    {
+        "team": {
+            "id": 132,
+            "name": "Chapecoense-sc",
+            "code": "CHA",
+            "country": "Brazil",
+            "founded": 1973,
+            "national": false,
+            "logo": "https://media.api-sports.io/football/teams/132.png"
+        },
+        "venue": {
+            "id": 227,
+            "name": "Arena Condá",
+            "address": "Rua Clevelândia, Bairro Centro",
+            "city": "Chapecó, Santa Catarina",
+            "capacity": 22600,
+            "surface": "grass",
+            "image": "https://media.api-sports.io/football/venues/227.png"
+        }
+    },
+    {
+        "team": {
+            "id": 133,
+            "name": "Vasco DA Gama",
+            "code": "VAS",
+            "country": "Brazil",
+            "founded": 1898,
+            "national": false,
+            "logo": "https://media.api-sports.io/football/teams/133.png"
+        },
+        "venue": {
+            "id": 279,
+            "name": "Estádio Club de Regatas Vasco da Gama",
+            "address": "Rua Gal Almério de Moura 131, Bairro Vasco da Gama",
+            "city": "Rio de Janeiro, Rio de Janeiro",
+            "capacity": 22076,
+            "surface": "grass",
+            "image": "https://media.api-sports.io/football/venues/279.png"
+        }
+    },
+    {
+        "team": {
+            "id": 135,
+            "name": "Cruzeiro",
+            "code": "CRU",
+            "country": "Brazil",
+            "founded": 1921,
+            "national": false,
+            "logo": "https://media.api-sports.io/football/teams/135.png"
+        },
+        "venue": {
+            "id": 234,
+            "name": "Estádio Governador Magalhães Pinto",
+            "address": "Avenida Antonio Abrahão Carã 1001, Pampulhas",
+            "city": "Belo Horizonte, Minas Gerais",
+            "capacity": 62170,
+            "surface": "grass",
+            "image": "https://media.api-sports.io/football/venues/234.png"
+        }
+    },
+    {
+        "team": {
+            "id": 138,
+            "name": "Guarani Campinas",
+            "code": "GUA",
+            "country": "Brazil",
+            "founded": 1911,
+            "national": false,
+            "logo": "https://media.api-sports.io/football/teams/138.png"
+        },
+        "venue": {
+            "id": 242,
+            "name": "Estádio Brinco de Ouro da Princesa",
+            "address": "Avenida Imperatriz Tereza Cristina 11, Bairro Jardim Paraíso",
+            "city": "Campinas, São Paulo",
+            "capacity": 29130,
+            "surface": "grass",
+            "image": "https://media.api-sports.io/football/venues/242.png"
+        }
+    },
+    {
+        "team": {
+            "id": 139,
+            "name": "Ponte Preta",
+            "code": "PON",
+            "country": "Brazil",
+            "founded": 1900,
+            "national": false,
+            "logo": "https://media.api-sports.io/football/teams/139.png"
+        },
+        "venue": {
+            "id": 261,
+            "name": "Estádio Moisés Lucarelli",
+            "address": "Praça Dr. Francisco Ursaia 1900 / Rua Proença, Jardim Proença",
+            "city": "Campinas, São Paulo",
+            "capacity": 17728,
+            "surface": "grass",
+            "image": "https://media.api-sports.io/football/venues/261.png"
+        }
+    },
+    {
+        "team": {
+            "id": 140,
+            "name": "Criciuma",
+            "code": "CRI",
+            "country": "Brazil",
+            "founded": 1947,
+            "national": false,
+            "logo": "https://media.api-sports.io/football/teams/140.png"
+        },
+        "venue": {
+            "id": 233,
+            "name": "Estádio Heriberto Hülse",
+            "address": "Rua Treze de Maio, Bairro Comerciário",
+            "city": "Criciúma, Santa Catarina",
+            "capacity": 28749,
+            "surface": "grass",
+            "image": "https://media.api-sports.io/football/venues/233.png"
+        }
+    },
+    {
+        "team": {
+            "id": 142,
+            "name": "Vila Nova",
+            "code": "VIL",
+            "country": "Brazil",
+            "founded": 1943,
+            "national": false,
+            "logo": "https://media.api-sports.io/football/teams/142.png"
+        },
+        "venue": {
+            "id": 280,
+            "name": "Estádio Onésio Brasileiro Alvarenga",
+            "address": "Rua 256 354, Setor Universitário, Bairro Centro",
+            "city": "Goiânia, Goiás",
+            "capacity": 11788,
+            "surface": "grass",
+            "image": "https://media.api-sports.io/football/venues/280.png"
+        }
+    },
+    {
+        "team": {
+            "id": 146,
+            "name": "CRB",
+            "code": "CRB",
+            "country": "Brazil",
+            "founded": 1912,
+            "national": false,
+            "logo": "https://media.api-sports.io/football/teams/146.png"
+        },
+        "venue": {
+            "id": 232,
+            "name": "Estádio Rei Pelé",
+            "address": "Avenida Siqueira Campos, Bairro Trapiche da Barra",
+            "city": "Maceió, Alagoas",
+            "capacity": 20801,
+            "surface": "grass",
+            "image": "https://media.api-sports.io/football/venues/232.png"
+        }
+    },
+    {
+        "team": {
+            "id": 148,
+            "name": "Londrina",
+            "code": "LON",
+            "country": "Brazil",
+            "founded": 1956,
+            "national": false,
+            "logo": "https://media.api-sports.io/football/teams/148.png"
+        },
+        "venue": {
+            "id": 249,
+            "name": "Estádio Municipal Jacy Scaff",
+            "address": "Avenida Henrique Mansano",
+            "city": "Londrina, Paraná",
+            "capacity": 31019,
+            "surface": "grass",
+            "image": "https://media.api-sports.io/football/venues/249.png"
+        }
+    },
+    {
+        "team": {
+            "id": 150,
+            "name": "CSA",
+            "code": "CSA",
+            "country": "Brazil",
+            "founded": 1913,
+            "national": false,
+            "logo": "https://media.api-sports.io/football/teams/150.png"
+        },
+        "venue": {
+            "id": 232,
+            "name": "Estádio Rei Pelé",
+            "address": "Avenida Siqueira Campos, Bairro Trapiche da Barra",
+            "city": "Maceió, Alagoas",
+            "capacity": 20801,
+            "surface": "grass",
+            "image": "https://media.api-sports.io/football/venues/232.png"
+        }
+    },
+    {
+        "team": {
+            "id": 155,
+            "name": "Sampaio Correa",
+            "code": "SAM",
+            "country": "Brazil",
+            "founded": 1923,
+            "national": false,
+            "logo": "https://media.api-sports.io/football/teams/155.png"
+        },
+        "venue": {
+            "id": 265,
+            "name": "Estádio Governador João Castelo",
+            "address": "Complexo Esportivo Castelão, Travessa Guaxenduba",
+            "city": "São Luís, Maranhão",
+            "capacity": 75263,
+            "surface": "grass",
+            "image": "https://media.api-sports.io/football/venues/265.png"
+        }
+    },
+    {
+        "team": {
+            "id": 755,
+            "name": "Nautico Recife",
+            "code": "NAU",
+            "country": "Brazil",
+            "founded": 1901,
+            "national": false,
+            "logo": "https://media.api-sports.io/football/teams/755.png"
+        },
+        "venue": {
+            "id": 12670,
+            "name": "Estádio Eládio de Barros Carvalho",
+            "address": "Avenida Conselheiro Rosa e Silva 1085, Bairro dos Afiltos",
+            "city": "Recife, Pernambuco",
+            "capacity": 22856,
+            "surface": "grass",
+            "image": "https://media.api-sports.io/football/venues/12670.png"
+        }
+    },
+    {
+        "team": {
+            "id": 1211,
+            "name": "Brusque",
+            "code": "BRU",
+            "country": "Brazil",
+            "founded": 1987,
+            "national": false,
+            "logo": "https://media.api-sports.io/football/teams/1211.png"
+        },
+        "venue": {
+            "id": 223,
+            "name": "Estádio Augusto Bauer",
+            "address": "Avenida Lauro Muller 13",
+            "city": "Brusque, Santa Catarina",
+            "capacity": 5587,
+            "surface": "grass",
+            "image": "https://media.api-sports.io/football/venues/223.png"
+        }
+    },
+    {
+        "team": {
+            "id": 1223,
+            "name": "Operario-PR",
+            "code": null,
+            "country": "Brazil",
+            "founded": 1912,
+            "national": false,
+            "logo": "https://media.api-sports.io/football/teams/1223.png"
+        },
+        "venue": {
+            "id": 256,
+            "name": "Estádio Germano Krüger",
+            "address": "Rua Padre Nóbrega 265, Bairro Vila Oficinas",
+            "city": "Ponta Grossa, Paraná",
+            "capacity": 8679,
+            "surface": "grass",
+            "image": "https://media.api-sports.io/football/venues/256.png"
+        }
+    },
+    {
+        "team": {
+            "id": 2227,
+            "name": "Tombense",
+            "code": "TOM",
+            "country": "Brazil",
+            "founded": 1914,
+            "national": false,
+            "logo": "https://media.api-sports.io/football/teams/2227.png"
+        },
+        "venue": {
+            "id": 1709,
+            "name": "Estádio Antônio Guimarães de Almeida",
+            "address": "Praça 27 de Janeiro",
+            "city": "Tombos, Minas Gerais",
+            "capacity": 3050,
+            "surface": "grass",
+            "image": "https://media.api-sports.io/football/venues/1709.png"
+        }
+    },
+    {
+        "team": {
+            "id": 7779,
+            "name": "Ituano",
+            "code": "ITU",
+            "country": "Brazil",
+            "founded": 1947,
+            "national": false,
+            "logo": "https://media.api-sports.io/football/teams/7779.png"
+        },
+        "venue": {
+            "id": 5632,
+            "name": "Estádio Municipal Dr. Novelli Júnior",
+            "address": "Avenida Dr. Prudente de Moraes 435, Vila Nova",
+            "city": "Itu, São Paulo",
+            "capacity": 18560,
+            "surface": "grass",
+            "image": "https://media.api-sports.io/football/venues/5632.png"
+        }
+    },
+    {
+        "team": {
+            "id": 7834,
+            "name": "Novorizontino",
+            "code": null,
+            "country": "Brazil",
+            "founded": 1973,
+            "national": false,
+            "logo": "https://media.api-sports.io/football/teams/7834.png"
+        },
+        "venue": {
+            "id": 5664,
+            "name": "Estádio Dr. Jorge Ismael de Biasi",
+            "address": "Avenida Domingos Baraldo 2879, Vila Patti",
+            "city": "Novo Horizonte, São Paulo",
+            "capacity": 16000,
+            "surface": "grass",
+            "image": "https://media.api-sports.io/football/venues/5664.png"
+        }
+    }
 ]

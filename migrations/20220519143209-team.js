@@ -27,7 +27,7 @@ module.exports = {
     let teams = JSON.parse(await readFile(`src/utils/teams/nba.json`, "utf8"));
     let teamsToInsert = [];
     for (let i = 0; i < teams.length; i++) {
-      teamsToInsert.push({id: 1, name: teams[i].full_name, leagueId: 1, createdAt: new Date(), updatedAt: new Date() });
+      teamsToInsert.push({ id: teams[i].id, name: teams[i].full_name, leagueId: 1, createdAt: new Date(), updatedAt: new Date() });
     }
     await queryInterface.bulkInsert('teams', teamsToInsert);
   },
