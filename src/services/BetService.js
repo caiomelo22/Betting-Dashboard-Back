@@ -130,7 +130,7 @@ const update_bar_chart_colors = (barChartInfo) => {
 }
 
 const project_colors = [
-    '#9C9EFE', '#2B4865', '#41b883', '#774360'
+    '#9C9EFE', '#2B4865', '#41b883', '#774360', '#FF7F3F'
 ]
 
 const dashboard = async (req, res) => {
