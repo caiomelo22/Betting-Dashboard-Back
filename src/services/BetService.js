@@ -232,7 +232,7 @@ const dashboard = async (req, res) => {
             generalInfo.totalBet += bets[i].value
 
             let betOutcomeValue
-            if (bets[i].won) {
+            if (bets[i].won || bets[i].earlyPayout) {
                 generalInfo.totalGreens += 1
                 betOutcomeValue = bets[i].value * bets[i].odds - bets[i].value
             } else {

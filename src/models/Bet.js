@@ -23,6 +23,11 @@ const Bet = database.sequelize.define("bets", {
     defaultValue: false,
     allowNull: false,
   },
+  earlyPayout: {
+    type: database.Sequelize.BOOLEAN,
+    defaultValue: false,
+    allowNull: false,
+  },
   type: {
     type: database.Sequelize.ENUM('Moneyline', 'Total'),
     allowNull: false,
