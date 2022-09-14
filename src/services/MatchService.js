@@ -63,7 +63,6 @@ const update = async (req, res) => {
                 
                 if(!findMatch.bets[i].won && !parlay.finished) {
                     await parlay.update({ finished: true })
-                    console.log(parlay)
                 }
                 if(parlay.finished) {
                     continue
