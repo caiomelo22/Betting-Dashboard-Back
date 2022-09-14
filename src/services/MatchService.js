@@ -51,11 +51,11 @@ const update = async (req, res) => {
             if (findMatch.bets[i].type == 'Moneyline' && ((scoreHomeTeam > scoreAwayTeam && findMatch.bets[i].moneyline.prediction == 'Home') ||
                 (scoreHomeTeam < scoreAwayTeam && findMatch.bets[i].moneyline.prediction == 'Away') ||
                 (scoreHomeTeam == scoreAwayTeam && findMatch.bets[i].moneyline.prediction == 'Draw'))) {
-                findMatch.bets[i].update({ won: true })
+                await findMatch.bets[i].update({ won: true })
             }
             else if (findMatch.bets[i].type == 'Total' && ((scoreHomeTeam + scoreAwayTeam > totalBets[i].total.line && totalBets[i].total.prediction == 'Over') ||
                 (scoreHomeTeam + scoreAwayTeam < totalBets[i].total.line && totalBets[i].total.prediction == 'Under'))) {
-                findMatch.bets[i].update({ won: true })
+                await findMatch.bets[i].update({ won: true })
             }
 
             if (findMatch.bets[i].parlayId) {
