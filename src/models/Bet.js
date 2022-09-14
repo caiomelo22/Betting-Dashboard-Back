@@ -12,11 +12,11 @@ const Bet = database.sequelize.define("bets", {
   },
   value: {
     type: database.Sequelize.FLOAT,
-    allowNull: false,
+    allowNull: true,
   },
   odds: {
     type: database.Sequelize.FLOAT,
-    allowNull: false,
+    allowNull: true,
   },
   won: {
     type: database.Sequelize.BOOLEAN,
@@ -31,6 +31,13 @@ const Bet = database.sequelize.define("bets", {
   type: {
     type: database.Sequelize.ENUM('Moneyline', 'Total'),
     allowNull: false,
+  },
+  parlayId: {
+    type: database.Sequelize.INTEGER,
+    allowNull: null,
+    references: { model: 'parlays', key: 'id' },
+    onUpdate: 'CASCADE',
+    onDelete: 'CASCADE',
   },
 });
 

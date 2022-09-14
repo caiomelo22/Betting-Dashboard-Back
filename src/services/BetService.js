@@ -4,7 +4,9 @@ const Team = require('../models/Team').Team;
 const BetMoneyline = require('../models/BetMoneyline').BetMoneyline;
 const BetTotal = require('../models/BetTotal').BetTotal;
 const moment = require('moment');
+const { Op } = require('sequelize');
 const { League } = require('../models/League');
+const { Parlay } = require('../models/Parlay');
 const { get_deposited_value } = require('../services/ConfigService');
 
 const list = async (req, res) => {
@@ -14,6 +16,9 @@ const list = async (req, res) => {
         const pageSize = 15
 
         const { count, rows } = await Bet.findAndCountAll({
+            where: {
+                value: { [Op.ne]: null }
+            },
             include: [{ model: Match, as: 'match', include: [{ model: Team, as: 'homeTeam' }, { model: Team, as: 'awayTeam' }, { model: League, as: 'league' }] }, { model: BetTotal, as: 'total' }, { model: BetMoneyline, as: 'moneyline' }], offset: (page - 1) * pageSize, limit: pageSize, order: [
                 [{ model: Match, as: 'match' }, 'matchDate', 'DESC'],
                 ['updatedAt', 'DESC'],
@@ -34,8 +39,8 @@ const list = async (req, res) => {
     }
 };
 
-const create = async (req, res) => {
-    let { leagueId, homeTeamId, awayTeamId, matchDate, value, odds, type, prediction, line } = req.body;
+const create_bet = async (bet) => {
+    let { leagueId, homeTeamId, awayTeamId, matchDate, value, odds, type, prediction, line, parlayId } = bet;
 
     try {
 
@@ -44,7 +49,6 @@ const create = async (req, res) => {
         matchDate = moment(matchDate).format();
 
         match = await Match.findOne({ where: { leagueId, homeTeamId, awayTeamId, matchDate } });
-        console.log(match)
 
         if (!match) {
             match = await Match.create({ leagueId, homeTeamId, awayTeamId, matchDate });
@@ -52,7 +56,7 @@ const create = async (req, res) => {
 
         const matchId = match.id;
 
-        const newBet = await Bet.create({ matchId, value, odds, type });
+        const newBet = await Bet.create({ matchId, parlayId, value, odds, type });
 
         const betId = newBet.id;
 
@@ -70,6 +74,10 @@ const create = async (req, res) => {
         console.log(error)
         return { statusCode: 500, data: 'An error has occured', error: error }
     }
+}
+
+const create = async (req, res) => {
+    return await create_bet(req.body)
 };
 
 const update = async (req, res) => {
@@ -133,6 +141,23 @@ const project_colors = [
     '#9C9EFE', '#2B4865', '#41b883', '#774360', '#FF7F3F', '#7DCE13'
 ]
 
+const check_bet_outcome = (bet, generalInfo, barChartInfo, chartInfo) => {
+    let betOutcomeValue
+    if (bet.won || bet.earlyPayout) {
+        generalInfo.totalGreens += 1
+        betOutcomeValue = bet.value * bet.odds - bet.value
+    } else {
+        generalInfo.totalReds += 1
+        betOutcomeValue = -bet.value
+    }
+
+    generalInfo.totalProfit += betOutcomeValue
+    barChartInfo.datasets[0].data[barChartInfo.datasets[0].data.length - 1] += betOutcomeValue
+    chartInfo.datasets[0].data[chartInfo.datasets[0].data.length - 1] += betOutcomeValue
+
+    return betOutcomeValue
+}
+
 const dashboard = async (req, res) => {
     try {
         const bets = await Bet.findAll({
@@ -141,7 +166,25 @@ const dashboard = async (req, res) => {
                 { model: Team, as: 'awayTeam' }, { model: League, as: 'league' }]
             }, { model: BetTotal, as: 'total' }, { model: BetMoneyline, as: 'moneyline' }], order: [
                 [{ model: Match, as: 'match' }, 'matchDate', 'ASC'],
-                ['updatedAt', 'DESC'],
+                ['createdAt', 'DESC'],
+            ],
+        });
+        
+        const parlayInclude = {
+            model: Bet,
+            as: 'bets',
+            include: [{
+                model: Match, as: 'match', include: [
+                    { model: Team, as: 'homeTeam' },
+                    { model: Team, as: 'awayTeam' },
+                    { model: League, as: 'league' }]
+            }, { model: BetTotal, as: 'total' }, { model: BetMoneyline, as: 'moneyline' }]
+        }
+
+        const parlays = await Parlay.findAll({
+            include: parlayInclude, order: [
+                ['date', 'ASC'],
+                ['createdAt', 'DESC'],
             ],
         });
 
@@ -215,7 +258,7 @@ const dashboard = async (req, res) => {
         }
 
         for (let i = 0; i < bets.length; i++) {
-            let betDate = moment(bets[i].match.matchDate).format('DD-MM-YYYY')
+            let betDate = moment.utc(bets[i].match.matchDate).format('DD-MM-YYYY')
             if (labels[labels.length - 1] != betDate) {
                 update_bar_chart_colors(barChartInfo)
 
@@ -224,21 +267,23 @@ const dashboard = async (req, res) => {
                 chartInfo.datasets[0].data.push(generalInfo.totalProfit)
                 barChartInfo.datasets[0].data.push(0)
 
-                for (let i = 0; i < leagues.length; i++) {
-                    leagueChartInfo.datasets[i].data.push(leagueChartInfo.datasets[i].data[leagueChartInfo.datasets[i].data.length - 1] || 0)
+                let dateParlays = parlays.filter(x => moment.utc(x.date).format('DD-MM-YYYY') == betDate)
+                for(let j = 0; j < dateParlays.length; j++) {
+                    check_bet_outcome(dateParlays[j], generalInfo, barChartInfo, chartInfo)
                 }
+
+                for (let j = 0; j < leagues.length; j++) {
+                    leagueChartInfo.datasets[j].data.push(leagueChartInfo.datasets[j].data[leagueChartInfo.datasets[j].data.length - 1] || 0)
+                }
+            }
+
+            if(bets[i].value == null) {
+                continue
             }
 
             generalInfo.totalBet += bets[i].value
 
-            let betOutcomeValue
-            if (bets[i].won || bets[i].earlyPayout) {
-                generalInfo.totalGreens += 1
-                betOutcomeValue = bets[i].value * bets[i].odds - bets[i].value
-            } else {
-                generalInfo.totalReds += 1
-                betOutcomeValue = -bets[i].value
-            }
+            betOutcomeValue = check_bet_outcome(bets[i], generalInfo, barChartInfo, chartInfo)
 
             if (bets[i].type == 'Moneyline') {
                 let team
@@ -255,10 +300,6 @@ const dashboard = async (req, res) => {
                 if (bets[i].moneyline.prediction != 'Draw') profitByTeam[team] += betOutcomeValue
                 proiftByOutcome[bets[i].moneyline.prediction] += betOutcomeValue
             }
-
-            generalInfo.totalProfit += betOutcomeValue
-            barChartInfo.datasets[0].data[barChartInfo.datasets[0].data.length - 1] += betOutcomeValue
-            chartInfo.datasets[0].data[chartInfo.datasets[0].data.length - 1] += betOutcomeValue
 
             if (i + 1 == bets.length || moment(bets[i + 1].match.matchDate).format('DD-MM-YYYY') != betDate) {
                 const last5Profit = chartInfo.datasets[0].data.slice(-5).reduce((acc, val) => acc + val);
@@ -337,5 +378,6 @@ module.exports = {
     create,
     update,
     remove,
-    dashboard
+    dashboard,
+    create_bet
 }
