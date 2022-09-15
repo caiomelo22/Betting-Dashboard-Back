@@ -162,7 +162,9 @@ const dashboard = async (req, res) => {
     try {
         const bets = await Bet.findAll({
             include: [{
-                model: Match, as: 'match', include: [{ model: Team, as: 'homeTeam' },
+                model: Match, as: 'match', 
+                // where: {matchDate: {[Op.gte]: '2022-09-09'}}, 
+                include: [{ model: Team, as: 'homeTeam' },
                 { model: Team, as: 'awayTeam' }, { model: League, as: 'league' }]
             }, { model: BetTotal, as: 'total' }, { model: BetMoneyline, as: 'moneyline' }], order: [
                 [{ model: Match, as: 'match' }, 'matchDate', 'ASC'],
@@ -249,7 +251,9 @@ const dashboard = async (req, res) => {
             'Away': 0,
         }
 
+        const validBets = bets.filter(x => x.value)
         let generalInfo = {
+            avgOdds: (validBets.reduce((prev, curr) => prev + curr.odds, 0))/validBets.length,
             totalBet: 0,
             totalProfit: 0,
             totalGreens: 0,
