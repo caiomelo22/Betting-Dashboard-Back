@@ -19,7 +19,8 @@ const list = async (req, res) => {
             where: {
                 value: { [Op.ne]: null }
             },
-            include: [{ model: Match, as: 'match', include: [{ model: Team, as: 'homeTeam' }, { model: Team, as: 'awayTeam' }, { model: League, as: 'league' }] }, { model: BetTotal, as: 'total' }, { model: BetMoneyline, as: 'moneyline' }], offset: (page - 1) * pageSize, limit: pageSize, order: [
+            include: [{ model: Match, as: 'match', include: [{ model: Team, as: 'homeTeam' }, { model: Team, as: 'awayTeam' }, { model: League, as: 'league' }] }, { model: BetTotal, as: 'total' }, { model: BetMoneyline, as: 'moneyline' }], 
+            offset: (page - 1) * pageSize, limit: pageSize, order: [
                 [{ model: Match, as: 'match' }, 'matchDate', 'DESC'],
                 ['updatedAt', 'DESC'],
             ],

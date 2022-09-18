@@ -15,7 +15,8 @@ const list = async (req, res) => {
 
         const { count, rows } = await Match.findAndCountAll({
             where: { scoreHomeTeam: null, scoreAwayTeam: null },
-            include: [{ model: Team, as: 'homeTeam' }, { model: Team, as: 'awayTeam' }, { model: League, as: 'league' }], offset: page - 1, limit: pageSize, order: [
+            include: [{ model: Team, as: 'homeTeam' }, { model: Team, as: 'awayTeam' }, { model: League, as: 'league' }], 
+            offset: (page - 1) * pageSize, limit: pageSize, order: [
                 ['matchDate', 'DESC'],
                 ['updatedAt', 'DESC'],
             ],
