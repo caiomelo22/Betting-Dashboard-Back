@@ -54,8 +54,8 @@ const update = async (req, res) => {
                 (scoreHomeTeam == scoreAwayTeam && findMatch.bets[i].moneyline.prediction == 'Draw'))) {
                 await findMatch.bets[i].update({ won: true })
             }
-            else if (findMatch.bets[i].type == 'Total' && ((scoreHomeTeam + scoreAwayTeam > totalBets[i].total.line && totalBets[i].total.prediction == 'Over') ||
-                (scoreHomeTeam + scoreAwayTeam < totalBets[i].total.line && totalBets[i].total.prediction == 'Under'))) {
+            else if (findMatch.bets[i].type == 'Total' && ((scoreHomeTeam + scoreAwayTeam > findMatch.bets[i].total.line && findMatch.bets[i].total.prediction == 'Over') ||
+                (scoreHomeTeam + scoreAwayTeam < findMatch.bets[i].total.line && findMatch.bets[i].total.prediction == 'Under'))) {
                 await findMatch.bets[i].update({ won: true })
             }
 
