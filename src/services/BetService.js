@@ -139,7 +139,7 @@ const update_bar_chart_colors = (barChartInfo) => {
 }
 
 const project_colors = [
-    '#9C9EFE', '#2B4865', '#41b883', '#774360', '#FF7F3F', '#7DCE13'
+    '#9C9EFE', '#2B4865', '#41b883', '#774360', '#FF7F3F', '#7DCE13', '#224B0C'
 ]
 
 const check_bet_outcome = (bet, generalInfo, barChartInfo, chartInfo) => {
