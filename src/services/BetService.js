@@ -159,6 +159,10 @@ const check_bet_outcome = (bet, generalInfo, barChartInfo, chartInfo) => {
     return betOutcomeValue
 }
 
+const get_parlay_leagues = (parlay) => {
+    return [...new Set(parlay.bets.map(x => x.match.league.id))]
+}
+
 const dashboard = async (req, res) => {
     try {
         const bets = await Bet.findAll({
@@ -274,7 +278,12 @@ const dashboard = async (req, res) => {
 
                 let dateParlays = parlays.filter(x => moment.utc(x.date).format('DD-MM-YYYY') == betDate)
                 for(let j = 0; j < dateParlays.length; j++) {
-                    check_bet_outcome(dateParlays[j], generalInfo, barChartInfo, chartInfo)
+                    const parlayValue = check_bet_outcome(dateParlays[j], generalInfo, barChartInfo, chartInfo)
+                    const parlayLeagues = get_parlay_leagues(dateParlays[j])
+                    if(parlayLeagues.length == 1) {
+                        const index = leagueChartInfo.datasets.map(x => x.leagueId).indexOf(parlayLeagues[0])
+                        leagueChartInfo.datasets[index].data[leagueChartInfo.datasets[index].data.length - 1] += parlayValue
+                    }
                 }
 
                 for (let j = 0; j < leagues.length; j++) {
