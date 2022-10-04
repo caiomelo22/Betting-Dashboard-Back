@@ -1,6 +1,6 @@
 const database = require("../database/db");
+const { LeagueTeam } = require("./LeagueTeam");
 const Sport = require('./Sport').Sport;
-const Team = require('./Team').Team;
 
 const League = database.sequelize.define("leagues", {
   sportId: {
@@ -17,8 +17,7 @@ const League = database.sequelize.define("leagues", {
 });
 
 League.belongsTo(Sport, { as: 'sport' });
-Team.belongsTo(League);
-League.hasMany(Team, { foreignKey: 'leagueId', as: 'teams' });
+League.hasMany(LeagueTeam, {foreignKey: 'leagueId', as: 'teams'})
 
 module.exports = {
   League
