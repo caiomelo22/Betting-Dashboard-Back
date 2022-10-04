@@ -5,6 +5,7 @@ const BetMoneyline = require('../models/BetMoneyline').BetMoneyline;
 const BetTotal = require('../models/BetTotal').BetTotal;
 const moment = require('moment');
 const { Op } = require('sequelize');
+const { BetBothScore } = require('../models/BetBothScore');
 const { League } = require('../models/League');
 const { Parlay } = require('../models/Parlay');
 const { get_deposited_value } = require('../services/ConfigService');
@@ -19,7 +20,8 @@ const list = async (req, res) => {
             where: {
                 value: { [Op.ne]: null }
             },
-            include: [{ model: Match, as: 'match', include: [{ model: Team, as: 'homeTeam' }, { model: Team, as: 'awayTeam' }, { model: League, as: 'league' }] }, { model: BetTotal, as: 'total' }, { model: BetMoneyline, as: 'moneyline' }], 
+            include: [{ model: Match, as: 'match', include: [{ model: Team, as: 'homeTeam' }, { model: Team, as: 'awayTeam' }, { model: League, as: 'league' }] }, 
+            { model: BetTotal, as: 'total' }, { model: BetMoneyline, as: 'moneyline' }, { model: BetBothScore, as: 'bothScore' }], 
             offset: (page - 1) * pageSize, limit: pageSize, order: [
                 [{ model: Match, as: 'match' }, 'matchDate', 'DESC'],
                 ['updatedAt', 'DESC'],
@@ -68,6 +70,9 @@ const create_bet = async (bet) => {
             case 'Total':
                 newBet.total = await BetTotal.create({ betId, prediction, line });
                 break;
+            case 'BothScore':
+                newBet.bothScore = await BetBothScore.create({ betId, prediction });
+                break;
         }
 
         return { statusCode: 200, data: newBet }
@@ -99,6 +104,9 @@ const update = async (req, res) => {
                 break;
             case 'Total':
                 await findBet.total.update({ prediction, line });
+                break;
+            case 'BothScore':
+                await findBet.bothScore.update({ prediction });
                 break;
         }
 
@@ -171,7 +179,7 @@ const dashboard = async (req, res) => {
                 // where: {matchDate: {[Op.gte]: '2022-09-09'}}, 
                 include: [{ model: Team, as: 'homeTeam' },
                 { model: Team, as: 'awayTeam' }, { model: League, as: 'league' }]
-            }, { model: BetTotal, as: 'total' }, { model: BetMoneyline, as: 'moneyline' }], order: [
+            }, { model: BetTotal, as: 'total' }, { model: BetMoneyline, as: 'moneyline' }, { model: BetBothScore, as: 'bothScore' }], order: [
                 [{ model: Match, as: 'match' }, 'matchDate', 'ASC'],
                 ['createdAt', 'DESC'],
             ],
@@ -185,7 +193,7 @@ const dashboard = async (req, res) => {
                     { model: Team, as: 'homeTeam' },
                     { model: Team, as: 'awayTeam' },
                     { model: League, as: 'league' }]
-            }, { model: BetTotal, as: 'total' }, { model: BetMoneyline, as: 'moneyline' }]
+            }, { model: BetTotal, as: 'total' }, { model: BetMoneyline, as: 'moneyline' }, { model: BetBothScore, as: 'bothScore' }]
         }
 
         const parlays = await Parlay.findAll({

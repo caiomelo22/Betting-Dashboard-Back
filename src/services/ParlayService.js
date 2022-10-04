@@ -6,7 +6,8 @@ const BetMoneyline = require('../models/BetMoneyline').BetMoneyline;
 const BetTotal = require('../models/BetTotal').BetTotal;
 const moment = require('moment');
 const { League } = require('../models/League');
-const { create_bet } = require('./BetService')
+const { create_bet } = require('./BetService');
+const { BetBothScore } = require('../models/BetBothScore');
 
 const list = async (req, res) => {
     try {
@@ -22,7 +23,7 @@ const list = async (req, res) => {
                     { model: Team, as: 'homeTeam' },
                     { model: Team, as: 'awayTeam' },
                     { model: League, as: 'league' }]
-            }, { model: BetTotal, as: 'total' }, { model: BetMoneyline, as: 'moneyline' }]
+            }, { model: BetTotal, as: 'total' }, { model: BetMoneyline, as: 'moneyline' }, { model: BetBothScore, as: 'bothScore' }]
         }
 
         const { count, rows } = await Parlay.findAndCountAll({
@@ -50,6 +51,8 @@ const create = async (req, res) => {
     let { value, odds, date, bets } = req.body;
 
     try {
+
+        date = moment(date).format();
 
         const parlay = await Parlay.create({ value, odds, date })
 
