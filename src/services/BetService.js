@@ -284,7 +284,11 @@ const dashboard = async (req, res) => {
                 chartInfo.datasets[0].data.push(generalInfo.totalProfit)
                 barChartInfo.datasets[0].data.push(0)
 
-                let dateParlays = parlays.filter(x => moment.utc(x.date).format('DD-MM-YYYY') == betDate)
+                for (let j = 0; j < leagues.length; j++) {
+                    leagueChartInfo.datasets[j].data.push(leagueChartInfo.datasets[j].data[leagueChartInfo.datasets[j].data.length - 1] || 0)
+                }
+
+                let dateParlays = parlays.filter(x => moment(x.date).format('DD-MM-YYYY') == betDate)
                 for(let j = 0; j < dateParlays.length; j++) {
                     const parlayValue = check_bet_outcome(dateParlays[j], generalInfo, barChartInfo, chartInfo)
                     const parlayLeagues = get_parlay_leagues(dateParlays[j])
@@ -292,10 +296,6 @@ const dashboard = async (req, res) => {
                         const index = leagueChartInfo.datasets.map(x => x.leagueId).indexOf(parlayLeagues[0])
                         leagueChartInfo.datasets[index].data[leagueChartInfo.datasets[index].data.length - 1] += parlayValue
                     }
-                }
-
-                for (let j = 0; j < leagues.length; j++) {
-                    leagueChartInfo.datasets[j].data.push(leagueChartInfo.datasets[j].data[leagueChartInfo.datasets[j].data.length - 1] || 0)
                 }
             }
 
