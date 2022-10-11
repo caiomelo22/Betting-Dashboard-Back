@@ -12,6 +12,11 @@ const BetMoneyline = database.sequelize.define("moneylinebets", {
     type: database.Sequelize.ENUM('Home', 'Away', 'Draw'),
     allowNull: false,
   },
+  includeDraw: {
+    type: database.Sequelize.BOOLEAN,
+    allowNull: false,
+    defaultValue: false
+  },
 });
 
 
