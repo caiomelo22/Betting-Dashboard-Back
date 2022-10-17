@@ -284,6 +284,11 @@ const dashboard = async (req, res) => {
                 chartInfo.datasets[0].data.push(generalInfo.totalProfit)
                 barChartInfo.datasets[0].data.push(0)
 
+                const last5Profit = chartInfo.datasets[0].data.slice(-5).reduce((acc, val) => acc + val);
+                const last5Length = chartInfo.datasets[0].data.slice(-5).length
+                movingAvg = last5Profit / last5Length
+                chartInfo.datasets[1].data.push(movingAvg)
+
                 for (let j = 0; j < leagues.length; j++) {
                     leagueChartInfo.datasets[j].data.push(leagueChartInfo.datasets[j].data[leagueChartInfo.datasets[j].data.length - 1] || 0)
                 }
@@ -321,13 +326,6 @@ const dashboard = async (req, res) => {
                 if (!(team in profitByTeam)) profitByTeam[team] = 0
                 if (bets[i].moneyline.prediction != 'Draw') profitByTeam[team] += betOutcomeValue
                 proiftByOutcome[bets[i].moneyline.prediction] += betOutcomeValue
-            }
-
-            if (i + 1 == bets.length || moment(bets[i + 1].match.matchDate).format('DD-MM-YYYY') != betDate) {
-                const last5Profit = chartInfo.datasets[0].data.slice(-5).reduce((acc, val) => acc + val);
-                const last5Length = chartInfo.datasets[0].data.slice(-5).length
-                movingAvg = last5Profit / last5Length
-                chartInfo.datasets[1].data.push(movingAvg)
             }
 
             const index = leagueChartInfo.datasets.map(x => x.leagueId).indexOf(bets[i].match.leagueId)
