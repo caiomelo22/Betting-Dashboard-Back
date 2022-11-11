@@ -12,6 +12,10 @@ const BetMoneyline = database.sequelize.define("moneylinebets", {
     type: database.Sequelize.ENUM('Home', 'Away', 'Draw'),
     allowNull: false,
   },
+  spread: {
+    type: database.Sequelize.FLOAT,
+    allowNull: true,
+  },
   includeDraw: {
     type: database.Sequelize.BOOLEAN,
     allowNull: false,

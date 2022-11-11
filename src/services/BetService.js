@@ -43,7 +43,7 @@ const list = async (req, res) => {
 };
 
 const create_bet = async (bet) => {
-    let { leagueId, homeTeamId, awayTeamId, matchDate, value, odds, type, prediction, line, parlayId } = bet;
+    let { leagueId, homeTeamId, awayTeamId, matchDate, value, odds, type, prediction, line, spread, parlayId } = bet;
 
     try {
 
@@ -66,6 +66,9 @@ const create_bet = async (bet) => {
         switch (type) {
             case 'Moneyline':
                 newBet.moneyline = await BetMoneyline.create({ betId, prediction });
+                break;
+            case 'Spread':
+                newBet.moneyline = await BetMoneyline.create({ betId, prediction, spread });
                 break;
             case 'Total':
                 newBet.total = await BetTotal.create({ betId, prediction, line });
@@ -101,6 +104,9 @@ const update = async (req, res) => {
         switch (type) {
             case 'Moneyline':
                 await findBet.moneyline.update({ prediction });
+                break;
+            case 'Spread':
+                await findBet.moneyline.update({ prediction, spread });
                 break;
             case 'Total':
                 await findBet.total.update({ prediction, line });

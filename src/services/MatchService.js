@@ -54,6 +54,7 @@ const update = async (req, res) => {
 
         await findMatch.update({ scoreHomeTeam, scoreAwayTeam });
 
+
         for (let i = 0; i < findMatch.bets.length; i++) {
             if (findMatch.bets[i].type == 'Moneyline' && ((scoreHomeTeam > scoreAwayTeam && findMatch.bets[i].moneyline.prediction == 'Home') ||
                 (scoreHomeTeam < scoreAwayTeam && findMatch.bets[i].moneyline.prediction == 'Away') ||
@@ -66,6 +67,10 @@ const update = async (req, res) => {
             }
             else if (findMatch.bets[i].type == 'BothScore' && ((scoreHomeTeam && scoreAwayTeam && findMatch.bets[i].bothScore.prediction) ||
                 (!scoreHomeTeam && !scoreAwayTeam && !findMatch.bets[i].bothScore.prediction))) {
+                await findMatch.bets[i].update({ won: true })
+            }
+            else if (findMatch.bets[i].type == 'Spread' && ((scoreHomeTeam + findMatch.bets[i].moneyline.spread > scoreAwayTeam && findMatch.bets[i].moneyline.prediction == 'Home') ||
+                (scoreHomeTeam < scoreAwayTeam + findMatch.bets[i].moneyline.spread && findMatch.bets[i].moneyline.prediction == 'Away'))) {
                 await findMatch.bets[i].update({ won: true })
             }
 

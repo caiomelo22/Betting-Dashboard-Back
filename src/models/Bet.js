@@ -30,7 +30,7 @@ const Bet = database.sequelize.define("bets", {
         allowNull: false,
     },
     type: {
-        type: database.Sequelize.ENUM('Moneyline', 'Total', 'BothScore'),
+        type: database.Sequelize.ENUM('Moneyline', 'Total', 'BothScore', 'Spread'),
         allowNull: false,
     },
     parlayId: {
