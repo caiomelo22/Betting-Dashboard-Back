@@ -222,6 +222,7 @@ const dashboard = async (req, res) => {
             leagueChartInfo.datasets.push({
                 label: leagues[i].name,
                 leagueId: leagues[i].id,
+                hidden: leagues[i].inactive,
                 fill: false,
                 backgroundColor: project_colors[i],
                 borderColor: project_colors[i],
@@ -388,7 +389,7 @@ const dashboard = async (req, res) => {
         chartInfo.labels = labels
 
         leagueChartInfo.datasets = leagueChartInfo.datasets.map(x => {
-            x.hidden = x.data[x.data.length - 1] == 0
+            x.hidden = x.data[x.data.length - 1] == 0 || x.hidden
             return x
         })
 

@@ -14,6 +14,11 @@ const League = database.sequelize.define("leagues", {
     type: database.Sequelize.STRING,
     allowNull: false,
   },
+  inactive: {
+    type: database.Sequelize.BOOLEAN,
+    allowNull: false,
+    defaultValue: false,
+  },
 });
 
 League.belongsTo(Sport, { as: 'sport' });
