@@ -11,6 +11,7 @@ const config = {
   "password": process.env.DATABASE_PASS,
   "database": process.env.DATABASE,
   "host": process.env.DATABASE_HOST,
+  "port": process.env.DATABASE_PORT,
   "dialect": "mysql"
 }
 
